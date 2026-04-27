@@ -10,7 +10,10 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     screen2 = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen3 = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+    surface2 = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+    surface3 = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
     clock = pygame.time.Clock()
     dt = 0
     font = pygame.font.Font('freesansbold.ttf', 36)
@@ -35,6 +38,10 @@ def main():
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     pause = False
+    show_a_text = False
+    show_b_text = False
+    show_c_text = False
+    show_d_text = False
 
     def draw_pause():
         pygame.draw.rect(surface, (128, 128, 128, 150), [0, 0, SCREEN_WIDTH, SCREEN_HEIGHT])
@@ -45,6 +52,22 @@ def main():
         surface.blit(font.render('Reset Game', True, "black"), (220, 230))
         surface.blit(font.render('Save Game', True, "black"), (540, 230))
         screen.blit(surface, (0,0))
+        #creates a new window for the pause screen, allowing the main game window to be frozen while the pause screen is displayed
+        screen2.fill((0, 0, 0, 0))  # Clear the second screen
+        surface2.fill((0, 0, 0, 0))  # Clear the surface for the second screen
+        #creates text for the new window
+        surface2.blit(font.render('An enemy appears:', True, "white"), (220, 160))
+        surface2.blit(font.render('Press Space to Resume', True, "white"), (220, 380))
+        surface2.blit(font.render('A to Attack', True, "white"), (800, 160))
+        surface2.blit(font.render('B to Defend', True, "white"), (800, 260))
+        surface2.blit(font.render('C to Spell', True, "white"), (800, 360))
+        surface2.blit(font.render('D to Heal', True, "white"), (800, 460))
+        #surface2.blit(font.render('Heal!', True, "white"), (220, 480))
+        # creates an enemy sprite on the new window
+        pygame.draw.circle(screen2, "white", (400, 300), 20, 2)
+        #enemy = Enemy(400, 300, 20)
+        #surface2.blit(font.render('Game Paused: Space to Resume', True, "white"), (220, 160))
+        screen2.blit(surface2, (0,0))
         return reset, save
 
     while True:
@@ -57,6 +80,61 @@ def main():
                         pause = False
                     else:
                         pause = True 
+                #if the a key is pressed during pause, display "Attack!" on the second screen
+                #if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a:
+                    if pause:
+                        #img = font.render('You chose to Attack!', True, "white"), (220, 160)
+                        #surface3.blit(font.render('The enemy takes damage!', True, "white"), (220, 260))
+                        #screen3.blit(img, (300,250))
+                        show_a_text = True
+                    else:
+                        show_a_text = False
+                    #surface2.blit(font.render('Attack!', True, "white"), (220, 480))
+                    #screen2.blit(surface2, (0,0))
+                    #if pause:
+                        #show_a_text = True
+                    #else:
+                        #show_a_text = False
+            #if the b key is pressed during pause, display "Defend!" on the second
+            #if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_b:
+                    if pause:
+                        show_b_text = True
+                    else:
+                        show_b_text = False
+            #if the c key is pressed during pause, display "Spell!" on the second screen
+            #if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
+                    if pause:
+                        show_c_text = True
+                    else:
+                        show_c_text = False
+            #if the d key is pressed during pause, display "Heal!" on the second screen
+            #if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_d:
+                    if pause:
+                        show_d_text = True
+                    else:
+                        show_d_text = False
+
+        if show_a_text:
+            img = font.render('You chose to Attack!', True, "white")
+            #surface3.blit(font.render('The enemy takes damage!', True, "white"), (220, 260))
+            screen3.blit(img, (220, 260))
+            #show_a_text = True
+            #surface2.blit(font.render('Attack!', True, "white"), (220, 480))
+            #screen2.blit(surface2, (0,0))
+        if show_b_text:
+            surface2.blit(font.render('Defend!', True, "white"), (220, 480))
+            screen2.blit(surface2, (0,0))
+        if show_c_text:
+            surface2.blit(font.render('Spell!', True, "white"), (220, 480))
+            screen2.blit(surface2, (0,0))
+        if show_d_text:
+            surface2.blit(font.render('Heal!', True, "white"), (220, 480))
+            screen2.blit(surface2, (0,0))
+
         screen.fill("green")
         #screen.blit(surface, (10, 10))
         #((f'dist: {distance} m', True, 'black'), (10, 10))
